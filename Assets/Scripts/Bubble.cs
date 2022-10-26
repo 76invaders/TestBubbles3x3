@@ -7,27 +7,33 @@ public class Bubble : MonoBehaviour
 {
     public GameObject _detacher;
 
-    Color _color;
+    public Color _color;
+    public int _type = 0;
     public int _score = 0;
+    public int indexInCollumn;
+    public bool toDestroy = false;
+    bool _activeState = false;
 
     //ScoreBoard _scoreBoard;
-    bool _activeState = false;
 
     private void Awake()
     {
-        switch (Random.Range(0, 3))
+        switch (Random.Range(1, 4))
         {
-            case 0:
+            case 1:
                 this._color = Color.red;
                 this._score = 100;
-                return;
-            case 1:
-                this._color = Color.green;
-                this._score = 200;
+                this._type = 1;
                 return;
             case 2:
+                this._color = Color.green;
+                this._score = 200;
+                this._type = 2;
+                return;
+            case 3:
                 this._color = Color.blue;
                 this._score = 300;
+                this._type = 3;
                 return;
         }
     }
@@ -41,8 +47,8 @@ public class Bubble : MonoBehaviour
     {
         BubbleLauncher();
     }
-    public void BubbleDestroyer()
-    { 
+    public void DestroyBubble()
+    {
         Destroy(gameObject);
         //+Очки
     }

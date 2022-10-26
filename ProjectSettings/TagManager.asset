@@ -7,6 +7,7 @@ TagManager:
   - Pendulum
   - ScoreBoard
   - Detacher
+  - Bubble
   layers:
   - Default
   - TransparentFX
