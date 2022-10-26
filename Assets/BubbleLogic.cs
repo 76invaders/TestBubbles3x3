@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BubbleLogic : MonoBehaviour
 {
-    int _color = 3;
+    int _color;
     int _index = 0;
     int _points = 100;
     void Start()
