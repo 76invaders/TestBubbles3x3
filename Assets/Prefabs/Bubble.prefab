@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1199926736787407458}
   - component: {fileID: 1199926736787407459}
   - component: {fileID: 1199926736787407456}
-  - component: {fileID: 1199926736787407468}
+  - component: {fileID: 263844638399466144}
   m_Layer: 0
   m_Name: Bubble
   m_TagString: Untagged
@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1199926736787407457}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.4, y: -0.739, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -111,7 +111,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1199926736787407457}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -120,11 +120,11 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1199926736787407468
+--- !u!114 &263844638399466144
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -133,6 +133,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1199926736787407457}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cc33135142951f4a97a6b28b1f98926, type: 3}
+  m_Script: {fileID: 11500000, guid: eb46d53a9fedcbe45add3048e0d17b5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Force: 0
+  _detacher: {fileID: 988703160065981805, guid: 94544822560dca14b9686e587c49d4dd, type: 3}
+  _score: 0
