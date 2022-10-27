@@ -6,30 +6,44 @@ using UnityEngine;
 
 public class Playfield : MonoBehaviour
 {
-    public Column[] Columns = new Column[3];
-
-    private void FixedUpdate()
+    public List<Column> Columns = new List<Column>();
+    public int ColumnsMaxValue = 3;
+    private void Update()
     {
-        CheckAllCollumns();
-    }
-
-    public void CheckAllCollumns()
-    {
-        CheckVerticals();
-        CheckHorisontals();
-        CheckDiagonalFromZero();
-        CheckDiagonalFromTwo();
-        DestroyBubblesIntoAllColums();
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            CheckVerticals();
+            CheckHorisontals();
+            CheckDiagonalFromZero();
+            CheckDiagonalFromTop();
+        }
     }
 
     public void CheckVerticals() //Вертикальная проверка
     {
+        bool _isToDestroy = false;
+
         foreach (Column column in Columns)
         {
-            if (column.ColumnFullness == 3
-                    && column.ColumnArray[0]._type != 0
-                    && column.ColumnArray[0]._type == column.ColumnArray[1]._type
-                    && column.ColumnArray[0]._type == column.ColumnArray[2]._type)
+            _isToDestroy = false;
+
+            if (column.ColumnFullness == ColumnsMaxValue)
+            {
+                for (int count = 1; count < Columns.Count; count++)
+                {
+
+                    if ((column.ColumnArray[count]._type) == (column.ColumnArray[count - 1]._type))
+                    {
+                        _isToDestroy = true;
+                    }
+                    else
+                    {
+                        _isToDestroy = false;
+                        break;
+                    }
+                }
+            }
+            if (_isToDestroy == true)
             {
                 foreach (Bubble bubble in column.ColumnArray)
                 {
@@ -41,65 +55,133 @@ public class Playfield : MonoBehaviour
 
     public void CheckHorisontals() //Горизонтальная проверка
     {
-        for (int bubble = 0; bubble < 3; bubble++)
+        bool _isToDestroy = false;
+
+        for (int bubbleCount = 0; bubbleCount < ColumnsMaxValue; bubbleCount++)
         {
-            try
+            _isToDestroy = false;
+            Debug.Log(Columns.Count);
+            for (int ColumnCount = 1; ColumnCount < Columns.Count; ColumnCount++)
             {
-                if (Columns[0].ColumnArray[bubble]._type == Columns[1].ColumnArray[bubble]._type &&
-                    Columns[0].ColumnArray[bubble]._type == Columns[2].ColumnArray[bubble]._type)
+                Debug.Log(ColumnCount);
+                Debug.Log(Columns.Count);
+                try
                 {
-                    foreach (Column column in Columns)
+                    if (Columns[ColumnCount].ColumnArray[bubbleCount]._type
+                        == (Columns[ColumnCount - 1].ColumnArray[bubbleCount])._type)
                     {
-                        column.ColumnArray[bubble].toDestroy = true;
+                        _isToDestroy = true;
+                    }
+                    else
+                    {
+                        _isToDestroy = false;
+                        break;
                     }
                 }
+                catch(ArgumentOutOfRangeException)
+                {
+                    _isToDestroy = false;
+                    break;
+                }
             }
-            catch (NullReferenceException)
+
+            if (_isToDestroy == true)
             {
+                foreach (Column column in Columns)
+                {
+                    column.ColumnArray[bubbleCount].toDestroy = true;
+                }
             }
         }
     }
 
-    public void CheckDiagonalFromZero() //Диагональная проверка от 0 до 2
+    public void CheckDiagonalFromZero() //Диагональная проверка с нуля
     {
-        try
+        bool _isToDestroy = false;
+
+        for (int ColumnCount = 1; ColumnCount < Columns.Count; ColumnCount++)
         {
-            if (Columns[0].ColumnArray[0]._type == Columns[1].ColumnArray[1]._type
-                && Columns[0].ColumnArray[0]._type == Columns[2].ColumnArray[2]._type)
+            _isToDestroy = false;
+            try
             {
-                Columns[0].ColumnArray[0].toDestroy = true;
-                Columns[1].ColumnArray[1].toDestroy = true;
-                Columns[2].ColumnArray[2].toDestroy = true;
+                if (Columns[ColumnCount].ColumnArray[ColumnCount]._type
+                == (Columns[ColumnCount - 1].ColumnArray[ColumnCount- 1])._type)
+                {
+                    _isToDestroy = true;
+                }
+                else
+                {
+                    _isToDestroy = false;
+                    break;
+                }
             }
-        }
-        catch (NullReferenceException)
-        {
+            catch (ArgumentOutOfRangeException)
+            {
+                _isToDestroy = false;
+                break;
+            }
+
+            if (_isToDestroy == true)
+            {
+                int count = 0;
+                foreach (Column column in Columns)
+                {
+                    Columns[count].ColumnArray[count].toDestroy = true;
+                    count++;
+                }
+            }
         }
     }
 
-    public void CheckDiagonalFromTwo() //Диагональная проверка от 2 до 0
+    public void CheckDiagonalFromTop() //Диагональная проверка с максимума
     {
-        try
+        bool _isToDestroy = false;
+
+        for (int ColumnCount = Columns.Count-1; ColumnCount >= 0; ColumnCount--)
         {
-            if (Columns[0].ColumnArray[2]._type == Columns[1].ColumnArray[1]._type
-                && Columns[0].ColumnArray[2]._type == Columns[2].ColumnArray[0]._type)
+            _isToDestroy = false;
+            try
             {
-                Columns[0].ColumnArray[2].toDestroy = true;
-                Columns[1].ColumnArray[1].toDestroy = true;
-                Columns[2].ColumnArray[0].toDestroy = true;
+                if (Columns[ColumnCount].ColumnArray[ColumnCount]._type
+                == (Columns[ColumnCount - 1].ColumnArray[ColumnCount - 1])._type)
+                {
+                    _isToDestroy = true;
+                }
+                else
+                {
+                    _isToDestroy = false;
+                    break;
+                }
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                _isToDestroy = false;
+                break;
+            }
+
+            Debug.Log(_isToDestroy);
+
+            if (_isToDestroy == true)
+            {
+                int countBubble = Columns.Count - 1;
+                int countColumn = 0;
+                foreach (Column column in Columns)
+                {
+                    Columns[countColumn].ColumnArray[countBubble].toDestroy = true;
+                    countBubble--;
+                    countColumn++;
+                }
             }
         }
-        catch (NullReferenceException)
-        {
-        }
     }
+
 
     void DestroyBubblesIntoAllColums()
     {
-        foreach(Column column in Columns)
+        foreach (Column column in Columns)
         {
-            column.ColumnFall();
+            
         }
     }
-    //проверка Геймовер
+        //проверка Геймовер
 }

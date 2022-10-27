@@ -10,7 +10,7 @@ public class Bubble : MonoBehaviour
     public Color _color;
     public int _type = 0;
     public int _score = 0;
-    public int indexInCollumn;
+    public int InCollumn = -1;
     public bool toDestroy = false;
     bool _activeState = false;
 

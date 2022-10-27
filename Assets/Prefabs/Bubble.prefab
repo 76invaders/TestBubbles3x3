@@ -115,14 +115,14 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 100
+  m_Mass: 0.1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 3
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &263844638399466144
 MonoBehaviour:
@@ -140,5 +140,5 @@ MonoBehaviour:
   _color: {r: 0, g: 0, b: 0, a: 0}
   _type: 0
   _score: 0
-  indexInCollumn: 0
+  InCollumn: -1
   toDestroy: 0
