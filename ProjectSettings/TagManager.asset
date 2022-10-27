@@ -8,6 +8,7 @@ TagManager:
   - ScoreBoard
   - Detacher
   - Bubble
+  - Playfield
   layers:
   - Default
   - TransparentFX

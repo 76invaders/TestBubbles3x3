@@ -33,7 +33,7 @@ public class Column : MonoBehaviour
                 ColumnFullness--;
             }
         }
-        ColumnArray.RemoveAll(b => b.toDestroy == true);
+        ColumnArray.RemoveAll(bubble => bubble.toDestroy == true);
     }
 
     public void SameBubbleChecker()

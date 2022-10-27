@@ -13,6 +13,7 @@ public class Bubble : MonoBehaviour
     public int InCollumn = -1;
     public bool toDestroy = false;
     bool _activeState = false;
+    Playfield playfield;
 
     //ScoreBoard _scoreBoard;
 
@@ -41,11 +42,15 @@ public class Bubble : MonoBehaviour
     private void Start()
     {
         this.gameObject.GetComponent<SpriteRenderer>().color = _color;
+        playfield = GameObject.FindGameObjectWithTag("Playfield").GetComponent<Playfield>();
     }
 
     private void Update()
     {
-        BubbleLauncher();
+        if (_activeState == false && Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            StartCoroutine("BubbleLaunchCorutine");
+        }
     }
     public void DestroyBubble()
     {
@@ -63,6 +68,27 @@ public class Bubble : MonoBehaviour
             this.transform.SetParent(GameObject.FindGameObjectWithTag("Detacher").transform);
             gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
         }
+    }
 
+    public void IsAutoDestroy()
+    {
+        if (InCollumn == -1)
+        {
+            StopCoroutine("BubbleLaunchCorutine");
+            playfield._spawner.SpawnBubble();
+            Destroy(gameObject);
+        }
+        else
+        {
+            StopCoroutine("BubbleLaunchCorutine");
+            playfield.CheckAndDelAllBubbles();
+        }
+    }
+
+    IEnumerator BubbleLaunchCorutine()
+    {
+        BubbleLauncher();
+        yield return new WaitForSeconds(3.0f);
+        IsAutoDestroy();
     }
 }

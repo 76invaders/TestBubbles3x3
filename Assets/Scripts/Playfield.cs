@@ -8,13 +8,28 @@ public class Playfield : MonoBehaviour
 {
     public static int ColumnsMaxValue = 3;
     public List<Column> Columns = new List<Column>();
+    public PendulumBubbleSpawner _spawner;
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.F1))
+        _spawner = GameObject.Find("ShotPoint").GetComponent<PendulumBubbleSpawner>();
+    }
+
+    public void CheckAndDelAllBubbles()
+    {
+        CheckVerticals();
+        CheckHorisontal();
+        CheckDiagonalFromZero();
+        CheckDiagonalFromTop();
+        DestroySelectedBubbles();
+        _spawner.SpawnBubble();
+    }
+
+    private void DestroySelectedBubbles()
+    {
+        foreach (Column column in Columns)
         {
-            CheckDiagonalFromZero();
-            DestroySelectedBubbles();
+            column.BubblesDestroy();
         }
     }
 
@@ -74,14 +89,12 @@ public class Playfield : MonoBehaviour
             if (Columns[counter].ColumnFullness >= 1 + counter &&
                 Columns[counter + 1].ColumnFullness >= 2 + counter &&
                 Columns[counter + 1].ColumnArray[counter + 1]._type == Columns[counter].ColumnArray[counter]._type)
-                {
-                    toDestroy = true;
-                    Debug.Log("Диагональ Вернула тру");
-                }
+            {
+                toDestroy = true;
+            }
             else
             {
                 toDestroy = false;
-                Debug.Log("Диагональ провалилась");
                 break;
             }
         }
@@ -92,16 +105,38 @@ public class Playfield : MonoBehaviour
             foreach (Column column in Columns)
             {
                 Columns[counter].ColumnArray[counter].toDestroy = true;
-                Debug.Log("Диагональ отмечена");
                 counter++;
             }
         }
     }
-    private void DestroySelectedBubbles()
+
+    public void CheckDiagonalFromTop() //Диагональная проверка с топа
     {
-        foreach (Column column in Columns)
+        bool toDestroy = false;
+
+        for (int counter = 0; counter < Columns.Count - 1; counter++)
         {
-            column.BubblesDestroy();
+            if (Columns[counter].ColumnFullness >= 3 - counter &&
+                Columns[counter + 1].ColumnFullness >= 2 - counter &&
+                Columns[counter + 1].ColumnArray[1 - counter]._type == Columns[counter].ColumnArray[2 - counter]._type)
+            {
+                toDestroy = true;
+            }
+            else
+            {
+                toDestroy = false;
+                break;
+            }
+        }
+
+        if (toDestroy == true)
+        {
+            int counter = 0;
+            foreach (Column column in Columns)
+            {
+                Columns[counter].ColumnArray[2 - counter].toDestroy = true;
+                counter++;
+            }
         }
     }
     //проверка Геймовер
