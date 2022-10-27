@@ -14,8 +14,7 @@ public class Bubble : MonoBehaviour
     public bool toDestroy = false;
     bool _activeState = false;
     Playfield playfield;
-
-    //ScoreBoard _scoreBoard;
+    ScoreBoard scoreBoard;
 
     private void Awake()
     {
@@ -43,6 +42,7 @@ public class Bubble : MonoBehaviour
     {
         this.gameObject.GetComponent<SpriteRenderer>().color = _color;
         playfield = GameObject.FindGameObjectWithTag("Playfield").GetComponent<Playfield>();
+        scoreBoard = GameObject.FindGameObjectWithTag("ScoreBoard").GetComponent<ScoreBoard>();
     }
 
     private void Update()
@@ -55,7 +55,7 @@ public class Bubble : MonoBehaviour
     public void DestroyBubble()
     {
         Destroy(gameObject);
-        //+Очки
+        scoreBoard.RecivePoints(_score);
     }
 
     //Скорборд(int a) Для расширения функционала и декомпозиции

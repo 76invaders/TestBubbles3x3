@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Playfield : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class Playfield : MonoBehaviour
         CheckDiagonalFromZero();
         CheckDiagonalFromTop();
         DestroySelectedBubbles();
+        GameOverCheck();
         _spawner.SpawnBubble();
     }
 
@@ -84,7 +86,7 @@ public class Playfield : MonoBehaviour
     {
         bool toDestroy = false;
 
-        for (int counter = 0; counter < Columns.Count-1; counter++)
+        for (int counter = 0; counter < Columns.Count - 1; counter++)
         {
             if (Columns[counter].ColumnFullness >= 1 + counter &&
                 Columns[counter + 1].ColumnFullness >= 2 + counter &&
@@ -139,5 +141,25 @@ public class Playfield : MonoBehaviour
             }
         }
     }
-    //проверка Геймовер
+
+    void GameOverCheck() //Добавить транзишн, сделать войд
+    {
+        int _counter = 0;
+        foreach (Column column in Columns)
+        {
+            if (column.ColumnFullness >= ColumnsMaxValue)
+            {
+                _counter++;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        if(_counter == Columns.Count)
+        {
+            SceneManager.LoadScene(2);
+        }
+    }
 }

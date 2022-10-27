@@ -1,14 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScoreBoard : MonoBehaviour
 {
-    //int Score = 0;
-    
-    //старт ресет?
+    public TextMeshProUGUI _textMesh;
+    int _score = 0;
 
-    //+очки
+    void Start()
+    {
+        _textMesh.text = $"Points: {_score}";
+    }
 
-    //ресет
+    public void RecivePoints(int points)
+    {
+        _score += points;
+        _textMesh.text = $"Points: {_score}";
+    }
+
+    public void ResetPoints()
+    {
+        _score = 0;
+    }
 }
