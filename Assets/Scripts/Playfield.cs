@@ -13,8 +13,7 @@ public class Playfield : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            CheckVerticals();
-            CheckHorisontal();
+            CheckDiagonalFromZero();
             DestroySelectedBubbles();
         }
     }
@@ -35,7 +34,7 @@ public class Playfield : MonoBehaviour
         {
 
             toDestroy = false;
-            try
+            try//Убрать, заменить на высоту
             {
                 int buferBubble = Columns[0].ColumnArray[bubbleRow]._type;
 
@@ -63,11 +62,41 @@ public class Playfield : MonoBehaviour
                 {
                     column.ColumnArray[bubbleRow].toDestroy = true;
                 }
-                Debug.Log("HorisontalIsTriggered");
             }
         }
     }
+    public void CheckDiagonalFromZero() //Диагональная проверка с нуля
+    {
+        bool toDestroy = false;
 
+        for (int counter = 0; counter < Columns.Count-1; counter++)
+        {
+            if (Columns[counter].ColumnFullness >= 1 + counter &&
+                Columns[counter + 1].ColumnFullness >= 2 + counter &&
+                Columns[counter + 1].ColumnArray[counter + 1]._type == Columns[counter].ColumnArray[counter]._type)
+                {
+                    toDestroy = true;
+                    Debug.Log("Диагональ Вернула тру");
+                }
+            else
+            {
+                toDestroy = false;
+                Debug.Log("Диагональ провалилась");
+                break;
+            }
+        }
+
+        if (toDestroy == true)
+        {
+            int counter = 0;
+            foreach (Column column in Columns)
+            {
+                Columns[counter].ColumnArray[counter].toDestroy = true;
+                Debug.Log("Диагональ отмечена");
+                counter++;
+            }
+        }
+    }
     private void DestroySelectedBubbles()
     {
         foreach (Column column in Columns)
