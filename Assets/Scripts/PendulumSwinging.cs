@@ -1,19 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PendulumSwinging : MonoBehaviour
 {
-    public float _angle = 40f;
-    public float _speed = 1f;
+    [SerializeField] float _angle = 40f;
+    [SerializeField] int _speed = 3;
 
-    void FixedUpdate()
+    void Update()
     {
-        MakeASwing(_angle, _speed);
+        MakeASwing(_angle);
     }
 
-    void MakeASwing(float angle, float speed)
+    void MakeASwing(float angle)
     {
-        transform.rotation = Quaternion.Euler(0, 0, angle * Mathf.Sin(Time.realtimeSinceStartup * speed));
+        transform.rotation = Quaternion.Euler(0, 0, angle * Mathf.Sin(Time.realtimeSinceStartup * _speed));
     }
 }

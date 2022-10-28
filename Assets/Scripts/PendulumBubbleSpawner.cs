@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PendulumBubbleSpawner : MonoBehaviour
 {
-    public GameObject bubble;
+    [SerializeField] GameObject _bubble;
 
     void Start()
     {
@@ -18,8 +16,9 @@ public class PendulumBubbleSpawner : MonoBehaviour
             SpawnBubble();
         }
     }
+
     public void SpawnBubble()
     {
-        Instantiate(bubble, this.transform, false);
+        Instantiate(_bubble, this.transform, false);
     }
 }

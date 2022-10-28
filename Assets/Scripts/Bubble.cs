@@ -1,20 +1,19 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bubble : MonoBehaviour
 {
-    public GameObject _detacher;
+    [SerializeField] BubblesParticles _bubblesParticles;
+    Playfield _playfield;
+    ScoreBoard _scoreBoard;
 
-    public Color _color;
-    public int _type = 0;
-    public int _score = 0;
-    public int InCollumn = -1;
+    public int type = 0;
+    public int inCollumn = -1;
     public bool toDestroy = false;
+
+    Color _color;
+    int _score = 0;
     bool _activeState = false;
-    Playfield playfield;
-    ScoreBoard scoreBoard;
 
     private void Awake()
     {
@@ -23,17 +22,17 @@ public class Bubble : MonoBehaviour
             case 1:
                 this._color = Color.red;
                 this._score = 100;
-                this._type = 1;
+                this.type = 1;
                 return;
             case 2:
                 this._color = Color.green;
                 this._score = 200;
-                this._type = 2;
+                this.type = 2;
                 return;
             case 3:
                 this._color = Color.blue;
                 this._score = 300;
-                this._type = 3;
+                this.type = 3;
                 return;
         }
     }
@@ -41,26 +40,34 @@ public class Bubble : MonoBehaviour
     private void Start()
     {
         this.gameObject.GetComponent<SpriteRenderer>().color = _color;
-        playfield = GameObject.FindGameObjectWithTag("Playfield").GetComponent<Playfield>();
-        scoreBoard = GameObject.FindGameObjectWithTag("ScoreBoard").GetComponent<ScoreBoard>();
+        _playfield = GameObject.FindGameObjectWithTag("Playfield").GetComponent<Playfield>();
+        _scoreBoard = GameObject.FindGameObjectWithTag("ScoreBoard").GetComponent<ScoreBoard>();
     }
 
     private void Update()
     {
-        if (_activeState == false && Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             StartCoroutine("BubbleLaunchCorutine");
+            enabled = false;
         }
     }
+
     public void DestroyBubble()
     {
-        Destroy(gameObject);
-        scoreBoard.RecivePoints(_score);
+        _scoreBoard.RecivePoints(_score);
+        Destroy(gameObject,0.5f);
+        _bubblesParticles.CreateParticle(_color, transform);
     }
 
-    //Скорборд(int a) Для расширения функционала и декомпозиции
+    IEnumerator BubbleLaunchCorutine()
+    {
+        LaunchBubble();
+        yield return new WaitForSeconds(3.0f);
+        IsAutoDestroy();
+    }
 
-    public void BubbleLauncher()
+    public void LaunchBubble()
     {
         if (_activeState == false && Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -72,23 +79,16 @@ public class Bubble : MonoBehaviour
 
     public void IsAutoDestroy()
     {
-        if (InCollumn == -1)
+        if (inCollumn == -1)
         {
             StopCoroutine("BubbleLaunchCorutine");
-            playfield._spawner.SpawnBubble();
+            _playfield.spawner.SpawnBubble();
             Destroy(gameObject);
         }
         else
         {
             StopCoroutine("BubbleLaunchCorutine");
-            playfield.CheckAndDelAllBubbles();
+            _playfield.CheckAndDelAllBubbles();
         }
-    }
-
-    IEnumerator BubbleLaunchCorutine()
-    {
-        BubbleLauncher();
-        yield return new WaitForSeconds(3.0f);
-        IsAutoDestroy();
     }
 }

@@ -1,19 +1,18 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Playfield : MonoBehaviour
 {
-    public static int ColumnsMaxValue = 3;
-    public List<Column> Columns = new List<Column>();
-    public PendulumBubbleSpawner _spawner;
+    [SerializeField] int _columnsMaxValue = 3;
+    [SerializeField] List<Column> _columns = new List<Column>();
+
+    [SerializeField] public PendulumBubbleSpawner spawner;
 
     private void Start()
     {
-        _spawner = GameObject.Find("ShotPoint").GetComponent<PendulumBubbleSpawner>();
+        spawner = GameObject.Find("ShotPoint").GetComponent<PendulumBubbleSpawner>();
     }
 
     public void CheckAndDelAllBubbles()
@@ -24,46 +23,46 @@ public class Playfield : MonoBehaviour
         CheckDiagonalFromTop();
         DestroySelectedBubbles();
         GameOverCheck();
-        _spawner.SpawnBubble();
+        spawner.SpawnBubble();
     }
 
-    private void DestroySelectedBubbles()
+    void DestroySelectedBubbles()
     {
-        foreach (Column column in Columns)
+        foreach (Column column in _columns)
         {
             column.BubblesDestroy();
         }
     }
 
-    public void CheckVerticals() //Вертикальная проверка
+    void CheckVerticals() //Вертикальная проверка
     {
-        foreach (Column column in Columns)
+        foreach (Column column in _columns)
         {
             column.SameBubbleChecker();
         }
     }
 
-    public void CheckHorisontal() //Горизонтальная проверка
+    void CheckHorisontal() //Горизонтальная проверка
     {
-        bool toDestroy = false;
+        bool _toDestroy = false;
 
-        for (int bubbleRow = 0; bubbleRow < ColumnsMaxValue; bubbleRow++)
+        for (int bubbleRow = 0; bubbleRow < _columnsMaxValue; bubbleRow++)
         {
 
-            toDestroy = false;
-            try//Убрать, заменить на высоту
+            _toDestroy = false;
+            try
             {
-                int buferBubble = Columns[0].ColumnArray[bubbleRow]._type;
+                int buferBubble = _columns[0].columnArray[bubbleRow].type;
 
-                foreach (Column column in Columns)
+                foreach (Column column in _columns)
                 {
-                    if (column.ColumnArray[bubbleRow]._type == buferBubble)
+                    if (column.columnArray[bubbleRow].type == buferBubble)
                     {
-                        toDestroy = true;
+                        _toDestroy = true;
                     }
                     else
                     {
-                        toDestroy = false;
+                        _toDestroy = false;
                         break;
                     }
                 }
@@ -73,81 +72,82 @@ public class Playfield : MonoBehaviour
                 continue;
             }
 
-            if (toDestroy == true)
+            if (_toDestroy == true)
             {
-                foreach (Column column in Columns)
+                foreach (Column column in _columns)
                 {
-                    column.ColumnArray[bubbleRow].toDestroy = true;
+                    column.columnArray[bubbleRow].toDestroy = true;
                 }
             }
         }
     }
-    public void CheckDiagonalFromZero() //Диагональная проверка с нуля
-    {
-        bool toDestroy = false;
 
-        for (int counter = 0; counter < Columns.Count - 1; counter++)
+    void CheckDiagonalFromZero() //Диагональная проверка с нуля
+    {
+        bool _toDestroy = false;
+
+        for (int counter = 0; counter < _columns.Count - 1; counter++)
         {
-            if (Columns[counter].ColumnFullness >= 1 + counter &&
-                Columns[counter + 1].ColumnFullness >= 2 + counter &&
-                Columns[counter + 1].ColumnArray[counter + 1]._type == Columns[counter].ColumnArray[counter]._type)
+            if (_columns[counter].columnFullness >= 1 + counter &&
+                _columns[counter + 1].columnFullness >= 2 + counter &&
+                _columns[counter + 1].columnArray[counter + 1].type == _columns[counter].columnArray[counter].type)
             {
-                toDestroy = true;
+                _toDestroy = true;
             }
             else
             {
-                toDestroy = false;
+                _toDestroy = false;
                 break;
             }
         }
 
-        if (toDestroy == true)
+        if (_toDestroy == true)
         {
-            int counter = 0;
-            foreach (Column column in Columns)
+            int _counter = 0;
+            foreach (Column column in _columns)
             {
-                Columns[counter].ColumnArray[counter].toDestroy = true;
-                counter++;
+                _columns[_counter].columnArray[_counter].toDestroy = true;
+                _counter++;
             }
         }
     }
 
-    public void CheckDiagonalFromTop() //Диагональная проверка с топа
+    void CheckDiagonalFromTop() //Диагональная проверка с топа
     {
-        bool toDestroy = false;
+        bool _toDestroy = false;
 
-        for (int counter = 0; counter < Columns.Count - 1; counter++)
+        for (int counter = 0; counter < _columns.Count - 1; counter++)
         {
-            if (Columns[counter].ColumnFullness >= 3 - counter &&
-                Columns[counter + 1].ColumnFullness >= 2 - counter &&
-                Columns[counter + 1].ColumnArray[1 - counter]._type == Columns[counter].ColumnArray[2 - counter]._type)
+            if (_columns[counter].columnFullness >= 3 - counter &&
+                _columns[counter + 1].columnFullness >= 2 - counter &&
+                _columns[counter + 1].columnArray[1 - counter].type == _columns[counter].columnArray[2 - counter].type)
             {
-                toDestroy = true;
+                _toDestroy = true;
             }
             else
             {
-                toDestroy = false;
+                _toDestroy = false;
                 break;
             }
         }
 
-        if (toDestroy == true)
+        if (_toDestroy == true)
         {
-            int counter = 0;
-            foreach (Column column in Columns)
+            int _counter = 0;
+            foreach (Column column in _columns)
             {
-                Columns[counter].ColumnArray[2 - counter].toDestroy = true;
-                counter++;
+                _columns[_counter].columnArray[2 - _counter].toDestroy = true;
+                _counter++;
             }
         }
     }
 
-    void GameOverCheck() //Добавить транзишн, сделать войд
+    void GameOverCheck()
     {
         int _counter = 0;
-        foreach (Column column in Columns)
+        foreach (Column column in _columns)
         {
-            if (column.ColumnFullness >= ColumnsMaxValue)
+            if (column.columnFullness >= _columnsMaxValue)
             {
                 _counter++;
             }
@@ -157,7 +157,7 @@ public class Playfield : MonoBehaviour
             }
         }
 
-        if(_counter == Columns.Count)
+        if(_counter == _columns.Count)
         {
             SceneManager.LoadScene(2);
         }

@@ -1,64 +1,62 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Column : MonoBehaviour
 {
-    public List<Bubble> ColumnArray = new List<Bubble>();
-    BoxCollider2D registratorCollider2D;
-    public int ColumnFullness = 0;
-    public int ColumnIndex = 0;
+    [SerializeField] int _columnIndex = 0;
+    BoxCollider2D _registratorCollider2D;
+
+    public List<Bubble> columnArray = new List<Bubble>();
+    public int columnFullness = 0;
 
     private void Start()
     {
-        registratorCollider2D = GetComponent<BoxCollider2D>();
+        _registratorCollider2D = GetComponent<BoxCollider2D>();
     }
 
     void OnTriggerEnter2D(Collider2D bubble)
     {
-        ColumnFullness++;
-        ColumnArray.Add(bubble.GetComponent<Bubble>());
-        ColumnArray[ColumnFullness-1].InCollumn = ColumnIndex;
+        columnFullness++;
+        columnArray.Add(bubble.GetComponent<Bubble>());
+        columnArray[columnFullness - 1].inCollumn = _columnIndex;
     }
 
     public void BubblesDestroy()
     {
-        foreach (Bubble bubble in ColumnArray)
+        foreach (Bubble bubble in columnArray)
         {
-            if (bubble.InCollumn == ColumnIndex && bubble.toDestroy == true)
+            if (bubble.inCollumn == _columnIndex && bubble.toDestroy == true)
             {
                 bubble.DestroyBubble();
-                ColumnFullness--;
+                columnFullness--;
             }
         }
-        ColumnArray.RemoveAll(bubble => bubble.toDestroy == true);
+        columnArray.RemoveAll(bubble => bubble.toDestroy == true);
     }
 
     public void SameBubbleChecker()
     {
-        bool isSame = false;
+        bool _isSame = false;
 
-        if (ColumnFullness == 3)
+        if (columnFullness == 3)
         {
-            foreach (Bubble bubble in ColumnArray)
+            foreach (Bubble bubble in columnArray)
             {
-                if (bubble._type == ColumnArray[0]._type)
+                if (bubble.type == columnArray[0].type)
                 {
-                    isSame = true;
+                    _isSame = true;
                 }
                 else
                 {
-                    isSame = false;
+                    _isSame = false;
                     break;
                 }
             }
         }
 
-        if (isSame == true)
+        if (_isSame == true)
         {
-            foreach (Bubble bubble in ColumnArray)
+            foreach (Bubble bubble in columnArray)
             {
                 bubble.toDestroy = true;
             }
