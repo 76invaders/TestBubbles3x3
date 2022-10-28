@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,9 +16,9 @@ public class Playfield : MonoBehaviour
         spawner = GameObject.Find("ShotPoint").GetComponent<PendulumBubbleSpawner>();
     }
 
-    public void CheckAndDelAllBubbles()
+    public IEnumerator CheckAndDelAllBubblesCorutine()
     {
-        for(int count = _columnsMaxValue; count > 0; count--)
+        for (int count = _columnsMaxValue; count > 0; count--)
         {
             CheckVerticals();
             CheckHorisontal();
@@ -25,8 +26,10 @@ public class Playfield : MonoBehaviour
             CheckDiagonalFromTop();
             DestroySelectedBubbles();
             GameOverCheck();
+            yield return new WaitForSeconds(0.5f);
         }
         spawner.SpawnBubble();
+        StopAllCoroutines();
     }
 
     void DestroySelectedBubbles()

@@ -88,7 +88,8 @@ public class Bubble : MonoBehaviour
         else
         {
             StopCoroutine("BubbleLaunchCorutine");
-            _playfield.CheckAndDelAllBubbles();
+            _bubblesParticles.CreateParticle(_color, transform);
+            _playfield.StartCoroutine("CheckAndDelAllBubblesCorutine");
         }
     }
 }
