@@ -17,12 +17,15 @@ public class Playfield : MonoBehaviour
 
     public void CheckAndDelAllBubbles()
     {
-        CheckVerticals();
-        CheckHorisontal();
-        CheckDiagonalFromZero();
-        CheckDiagonalFromTop();
-        DestroySelectedBubbles();
-        GameOverCheck();
+        for(int count = _columnsMaxValue; count > 0; count--)
+        {
+            CheckVerticals();
+            CheckHorisontal();
+            CheckDiagonalFromZero();
+            CheckDiagonalFromTop();
+            DestroySelectedBubbles();
+            GameOverCheck();
+        }
         spawner.SpawnBubble();
     }
 
